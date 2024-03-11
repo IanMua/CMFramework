@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using ProjectBase.Base;
+using CMUFramework_Embark.Singleton;
 
 namespace CMUFramework_Embark.Event
 {

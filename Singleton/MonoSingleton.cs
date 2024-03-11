@@ -1,29 +1,17 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class MonoSingleton<T> : MonoBehaviour
+namespace CMUFramework_Embark.Singleton
 {
-    private static Lazy<T> instance;
-
-    public static T Instance => instance.Value;
-
-    protected virtual void Awake()
+    public class MonoSingleton<T> : MonoBehaviour
     {
-        instance = new Lazy<T>(this);
-    }
-}
+        private static Lazy<T> instance;
 
-public class GameManager : MonoSingleton<GameManager>
-{
-    protected override void Awake()
-    {
-        base.Awake();
-    }
-}
+        public static T Instance => instance.Value;
 
-public class Test
-{
-    private GameManager _gameManager = GameManager.Instance;
+        protected virtual void Awake()
+        {
+            instance = new Lazy<T>(this);
+        }
+    }
 }
