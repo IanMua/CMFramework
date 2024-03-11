@@ -1,8 +1,7 @@
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 
-namespace ProjectBase.Base
+namespace CMUFramework_Embark.Singleton
 {
     public class MonoAutoSingleton<T> : MonoBehaviour where T : MonoBehaviour
     {
@@ -12,27 +11,18 @@ namespace ProjectBase.Base
         {
             get
             {
-                if (instance.Value == null)
+                if (instance == null)
                 {
-                    GameObject gameObject = new GameObject();
-                    gameObject.name = typeof(T).ToString();
-                    instance = new Lazy<T>(gameObject.AddComponent<T>());
+                    instance = new Lazy<T>(() =>
+                    {
+                        GameObject gameObject = new GameObject();
+                        gameObject.name = typeof(T).ToString();
+                        return gameObject.AddComponent<T>();
+                    });
                 }
 
                 return instance.Value;
             }
         }
-    }
-
-    public class GameManager1 : MonoAutoSingleton<GameManager1>
-    {
-        public void Start()
-        {
-        }
-    }
-
-    public class Test
-    {
-        private GameManager _gameManager = GameManager.Instance;
     }
 }
