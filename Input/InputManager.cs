@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
+using CMUFramework_Embark.Input.Enum;
 using CMUFramework_Embark.Mono;
 using CMUFramework_Embark.Singleton;
+using CMUFramework_Embark.Tools;
+using UnityEngine.InputSystem;
 
 namespace CMUFramework_Embark.Input
 {
@@ -9,49 +12,92 @@ namespace CMUFramework_Embark.Input
     /// </summary>
     public class InputManager : Singleton<InputManager>
     {
-        public readonly Dictionary<InputMode, InputModeState> InputModes = new Dictionary<InputMode, InputModeState>();
+        private readonly Dictionary<InputModeEnum, InputModeStateEnum> _inputModes =
+            new Dictionary<InputModeEnum, InputModeStateEnum>();
+
+        private readonly Dictionary<string, AbstractInputListener> _inputModeListeners =
+            new Dictionary<string, AbstractInputListener>();
+
+        private AbstractInputListener _abstractInputListener;
+
+        private XRIDefaultInputActions _xriDefaultInputActions = new XRIDefaultInputActions();
 
         // 初始化的时候就开始监听输入
         public InputManager()
         {
             // 初始化三个模式为禁用
-            InputModes.Add(InputMode.KeyboardMouse, InputModeState.Disable);
-            InputModes.Add(InputMode.GameController, InputModeState.Disable);
-            InputModes.Add(InputMode.XRController, InputModeState.Disable);
+            _inputModes.Add(InputModeEnum.KeyboardMouse, InputModeStateEnum.Disable);
+            _inputModes.Add(InputModeEnum.GameController, InputModeStateEnum.Disable);
+            _inputModes.Add(InputModeEnum.XRController, InputModeStateEnum.Disable);
+        }
 
-            // 添加到帧更新
-            MonoManager.Instance.AddUpdateListener(InputModeDetection);
+        /// <summary>
+        /// 启用输入模式
+        /// </summary>
+        /// <param name="inputMode">输入模式枚举</param>
+        public void EnableInputMode(InputModeEnum inputMode)
+        {
+            _inputModes[inputMode] = InputModeStateEnum.Enable;
+        }
+
+        /// <summary>
+        /// 禁用输入模式
+        /// </summary>
+        /// <param name="inputMode">输入模式枚举</param>
+        public void DisableInputMode(InputModeEnum inputMode)
+        {
+            _inputModes[inputMode] = InputModeStateEnum.Disable;
         }
 
         // 输入模式检测，判断要监测哪个输入模式
         private void InputModeDetection()
         {
-            if (InputModes[InputMode.KeyboardMouse] == InputModeState.Enable)
+            if (_inputModes[InputModeEnum.KeyboardMouse] == InputModeStateEnum.Enable)
             {
-                KeyboardMouse();
+                if (_inputModeListeners.ContainsKey(_xriDefaultInputActions.XRILeftHandInteraction.ToString()))
+                {
+                    
+                }
+                _abstractInputListener = new KeyboardMouseInputListener(_xriDefaultInputActions.XRILeftHandInteraction);
             }
-            else if (InputModes[InputMode.GameController] == InputModeState.Enable)
+            else if (_inputModes[InputModeEnum.GameController] == InputModeStateEnum.Enable)
             {
-                GameController();
+                RealtimeDetectionGameController();
             }
-            else if (InputModes[InputMode.XRController] == InputModeState.Enable)
+            else if (_inputModes[InputModeEnum.XRController] == InputModeStateEnum.Enable)
             {
-                XRController();
+                RealtimeDetectionXRController();
             }
         }
 
-        // 键鼠控制模式
-        private void KeyboardMouse()
+        // 初始化键鼠控制
+        private void InitKeyboardMouse()
         {
         }
 
-        // XR控制模式
-        private void XRController()
+        // 初始化XR控制
+        private void InitXRController()
+        {
+            LoadAsset.LoadInputActions("");
+        }
+
+        // 初始化手柄控制
+        private void InitGameController()
         {
         }
 
-        // 手柄控制模式
-        private void GameController()
+        // 实时监测键鼠控制
+        private void RealtimeDetectionKeyboardMouse()
+        {
+        }
+
+        // 实时监测XR控制
+        private void RealtimeDetectionXRController()
+        {
+        }
+
+        // 实时监测手柄控制
+        private void RealtimeDetectionGameController()
         {
         }
     }
