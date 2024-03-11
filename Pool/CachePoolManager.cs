@@ -84,7 +84,7 @@ namespace CMUFramework_Embark.Pool
             else
             {
                 // Load GameObject from the Resources
-                gameObject = GameObject.Instantiate(Resources.Load<GameObject>(golName));
+                gameObject = GameObject.Instantiate(UnityEngine.Resources.Load<GameObject>(golName));
                 gameObject.name = golName;
             }
 
