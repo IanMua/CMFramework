@@ -4,11 +4,19 @@ namespace CMUFramework_Embark.Input.Enum
 {
     public enum InputModeEnum
     {
-        // 键鼠
-        [EnumUShort(1)] KeyboardMouse,
-        // XR
-        [EnumUShort(2)] XRController,
+        // 键盘
+        [EnumUShort(1)] Keyboard,
+
+        // 鼠标
+        [EnumUShort(2)] Mouse,
+
+        // XR手柄
+        [EnumUShort(3)] XRGamepad,
+
+        // XR控制器（头部）
+        [EnumUShort(4)] XRController,
+
         // 手柄
-        [EnumUShort(3)] GameController,
+        [EnumUShort(5)] Gamepad,
     }
 }
