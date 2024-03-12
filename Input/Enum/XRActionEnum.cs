@@ -5,7 +5,7 @@ namespace CMUFramework_Embark.Input.Enum
     public enum XRActionEnum
     {
         // 移动
-        [EnumString("Move"), EnumUShort(1001)] Move,
+        [EnumString("Joystick"), EnumUShort(1001)] Joystick,
 
         // 握把
         [EnumString("Grip"), EnumUShort(1002)] Grip,
