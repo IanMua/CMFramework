@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace CMUFramework_Embark.Singleton
 {
-    public class MonoSingleton<T> : MonoBehaviour
+    public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
     {
         private static Lazy<T> instance;
 
@@ -11,7 +11,7 @@ namespace CMUFramework_Embark.Singleton
 
         protected virtual void Awake()
         {
-            instance = new Lazy<T>(this);
+            instance = new Lazy<T>(this as T);
         }
     }
 }
