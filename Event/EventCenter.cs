@@ -4,6 +4,7 @@ using CMUFramework_Embark.Singleton;
 
 namespace CMUFramework_Embark.Event
 {
+    [Obsolete("弃用",true)]
     /// <summary>
     /// Event center module
     /// </summary>
