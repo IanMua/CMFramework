@@ -17,7 +17,7 @@ namespace CMUFramework_Embark.Extensions.Attributes
     public static class EnumUShortAttributeExtensions
     {
         // Enum拓展方法
-        public static ushort GetEnumUShort(this System.Enum value)
+        public static ushort GetEnumUShort(this EnumUShort value)
         {
             Type type = value.GetType();
             string name = System.Enum.GetName(type, value);

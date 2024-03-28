@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using CMUFramework_Embark.Singleton;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ namespace CMUFramework_Embark.Mono
     public class MonoManager : MonoAutoSingleton<MonoManager>
     {
         // 帧更新事件
-        private event Action _updateEvent;
+        private event Action UpdateEvent;
 
         private void Start()
         {
@@ -21,7 +22,7 @@ namespace CMUFramework_Embark.Mono
 
         private void Update()
         {
-            _updateEvent?.Invoke();
+            UpdateEvent?.Invoke();
         }
 
         /// <summary>
@@ -30,7 +31,7 @@ namespace CMUFramework_Embark.Mono
         /// <param name="action">事件方法</param>
         public void AddUpdateListener(Action action)
         {
-            _updateEvent += action;
+            UpdateEvent += action;
         }
 
         /// <summary>
@@ -39,7 +40,7 @@ namespace CMUFramework_Embark.Mono
         /// <param name="action">事件方法</param>
         public void RemoveUpdateListener(Action action)
         {
-            _updateEvent -= action;
+            UpdateEvent -= action;
         }
     }
 }

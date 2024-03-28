@@ -1,4 +1,6 @@
-﻿namespace CMUFramework_Embark.Observer
+﻿using System;
+
+namespace CMUFramework_Embark.Observer
 {
     // 对话系统被观察者
     public interface ISubject
@@ -7,13 +9,13 @@
         /// 注册观察者
         /// </summary>
         /// <param name="observer">观察者</param>
-        void RegisterObserver(IObserver observer);
+        void RegisterObserver(Action<object> observer);
 
         /// <summary>
         /// 移除观察者
         /// </summary>
         /// <param name="observer">观察者</param>
-        void RemoveObserver(IObserver observer);
+        void RemoveObserver(Action<object> observer);
 
         /// <summary>
         /// 被观察者发起通信

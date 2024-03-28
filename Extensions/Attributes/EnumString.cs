@@ -3,6 +3,7 @@ using System.Reflection;
 
 namespace CMUFramework_Embark.Extensions.Attributes
 {
+    [Obsolete("",false)]
     [AttributeUsage(AttributeTargets.Field)]
     public class EnumString : System.Attribute
     {
@@ -17,7 +18,7 @@ namespace CMUFramework_Embark.Extensions.Attributes
     public static class EnumStringAttributeExtensions
     {
         // Enum拓展方法
-        public static string GetEnumString(this System.Enum value)
+        public static string GetEnumString(this EnumString value)
         {
             Type type = value.GetType();
             string name = System.Enum.GetName(type, value);
