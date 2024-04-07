@@ -1,58 +1,61 @@
 using System;
+using CMUFramework_Embark.Event;
 
 namespace CMUFramework_Embark.BindableProperty
 {
     /// <summary>
     /// 可绑定属性
     /// </summary>
-    /// <remarks>继承了 IEquatable 接口数据类型和类</remarks>
+    /// <remarks>Value更改后会触发类中的事件</remarks>
     /// <typeparam name="T">Type</typeparam>
-    public class BindableProperty<T> where T : IEquatable<T>
+    public class BindableProperty<T>
     {
         private T _value;
+
+        private Action<T> _onValueChanged;
 
         public T Value
         {
             get => _value;
             set
             {
-                // Debug.Log(typeof(T) + "的值：" + _value + " 改变了");
                 if (!value.Equals(_value))
                 {
-                    // Debug.Log(typeof(T) + "的值：" + _value + " 委托");
                     _value = value;
 
-                    OnValueChanged?.Invoke(_value);
+                    _onValueChanged?.Invoke(_value);
                 }
             }
         }
 
-        public Action<T> OnValueChanged;
+        public IUnregister RegisterOnValueChanged(Action<T> onValueChanged)
+        {
+            _onValueChanged += onValueChanged;
+            return new BindablePropertyUnregister<T>()
+            {
+                BindableProperty = this,
+                OnValueChanged = onValueChanged
+            };
+        }
+
+        public void UnregisterOnValueChanged(Action<T> onValueChanged)
+        {
+            _onValueChanged -= onValueChanged;
+        }
     }
 
-    /// <summary>
-    /// 引用类型的可绑定属性
-    /// </summary>
-    /// <remarks>没有继承 IEquatable 接口的引用类型的可绑定属性。当值改变时，判断堆地址是否相同</remarks>
-    /// <typeparam name="T">Type</typeparam>
-    public class RefBindableProperty<T> where T : class
+    public class BindablePropertyUnregister<T> : IUnregister
     {
-        private T _value;
+        public BindableProperty<T> BindableProperty { get; set; }
 
-        public T Value
+        public Action<T> OnValueChanged { get; set; }
+
+        public void Unregister()
         {
-            get => _value;
-            set
-            {
-                if (!System.Object.ReferenceEquals(value, _value))
-                {
-                    _value = value;
+            BindableProperty.UnregisterOnValueChanged(OnValueChanged);
 
-                    OnValueChanged?.Invoke(_value);
-                }
-            }
+            BindableProperty = null;
+            OnValueChanged = null;
         }
-
-        public Action<T> OnValueChanged;
     }
 }
