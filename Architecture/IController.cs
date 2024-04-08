@@ -3,7 +3,7 @@
 namespace CMUFramework_Embark.Architecture
 {
     public interface IController : IBelongToArchitecture, ICanSendCommand, ICanGetSystem, ICanGetModel,
-        ICanRegisterEvent
+        ICanRegisterEvent, ICanSendQuery
     {
     }
 }

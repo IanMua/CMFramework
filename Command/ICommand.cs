@@ -4,7 +4,7 @@ using CMUFramework_Embark.Architecture.Rule;
 namespace CMUFramework_Embark.Command
 {
     public interface ICommand : IBelongToArchitecture, ICanSetArchitecture, ICanGetModel, ICanGetUtility, ICanGetSystem,
-        ICanSendCommand, ICanSendEvent
+        ICanSendCommand, ICanSendEvent, ICanSendQuery
     {
         void Execute();
 
