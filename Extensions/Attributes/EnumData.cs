@@ -17,7 +17,12 @@ namespace CMUFramework_Embark.Extensions.Attributes
 
     public static class EnumDataAttributeExtensions
     {
-        // Enum拓展方法
+        /// <summary>
+        /// 获取枚举EnumData注解中的值
+        /// </summary>
+        /// <param name="value">目标枚举</param>
+        /// <typeparam name="T">EnumData注解中值的类型</typeparam>
+        /// <returns></returns>
         public static T GetData<T>(this Enum value) where T : class
         {
             Type type = value.GetType();
