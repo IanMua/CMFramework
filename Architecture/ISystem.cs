@@ -27,6 +27,9 @@ namespace CMUFramework_Embark.Architecture
             OnInit();
         }
 
+        /// <summary>
+        /// 执行初始化
+        /// </summary>
         protected abstract void OnInit();
     }
 }
