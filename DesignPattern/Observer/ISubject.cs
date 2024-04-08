@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CMUFramework_Embark.Observer
+namespace CMUFramework_Embark.DesignPattern.Observer
 {
     // 对话系统被观察者
     public interface ISubject

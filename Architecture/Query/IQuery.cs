@@ -1,7 +1,6 @@
-﻿using CMUFramework_Embark.Architecture;
-using CMUFramework_Embark.Architecture.Rule;
+﻿using CMUFramework_Embark.Architecture.Rule;
 
-namespace CMUFramework_Embark.Query
+namespace CMUFramework_Embark.Architecture.Query
 {
     public interface IQuery<TResult> : IBelongToArchitecture, ICanSetArchitecture, ICanGetModel, ICanGetSystem,
         ICanSendQuery

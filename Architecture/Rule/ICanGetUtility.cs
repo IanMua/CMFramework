@@ -1,4 +1,4 @@
-﻿using CMUFramework_Embark.Mono;
+﻿using CMUFramework_Embark.Utility;
 
 namespace CMUFramework_Embark.Architecture.Rule
 {
@@ -25,10 +25,10 @@ namespace CMUFramework_Embark.Architecture.Rule
         /// <summary>
         /// 获取 MonoManager
         /// </summary>
-        /// <returns><see cref="MonoManager"/></returns>
-        public static MonoManager GetMonoManager(this ICanGetUtility self)
+        /// <returns><see cref="UpdateBehaviour"/></returns>
+        public static UpdateBehaviour GetUpdateBehaviour(this ICanGetUtility self)
         {
-            return MonoManager.Instance;
+            return UpdateBehaviour.Instance;
         }
     }
 }

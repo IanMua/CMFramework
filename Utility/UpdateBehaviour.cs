@@ -1,13 +1,13 @@
 ﻿using System;
 using CMUFramework_Embark.Singleton;
 
-namespace CMUFramework_Embark.Mono
+namespace CMUFramework_Embark.Utility
 {
     /// <summary>
     /// Mono管理类
-    /// 给非Mono类提供帧更新、协程等方法
+    /// 给非Mono类提供帧更新方法
     /// </summary>
-    public class MonoManager : MonoAutoSingleton<MonoManager>
+    public class UpdateBehaviour : MonoAutoSingleton<UpdateBehaviour>
     {
         // 帧更新事件
         private event Action UpdateEvent;

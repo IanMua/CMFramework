@@ -1,4 +1,4 @@
-﻿using CMUFramework_Embark.Command;
+﻿using CMUFramework_Embark.Architecture.Command;
 
 namespace CMUFramework_Embark.Architecture.Rule
 {

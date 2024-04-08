@@ -1,7 +1,6 @@
-﻿using CMUFramework_Embark.Architecture;
-using CMUFramework_Embark.Architecture.Rule;
+﻿using CMUFramework_Embark.Architecture.Rule;
 
-namespace CMUFramework_Embark.Command
+namespace CMUFramework_Embark.Architecture.Command
 {
     public interface ICommand : IBelongToArchitecture, ICanSetArchitecture, ICanGetModel, ICanGetUtility, ICanGetSystem,
         ICanSendCommand, ICanSendEvent, ICanSendQuery

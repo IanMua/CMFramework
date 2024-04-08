@@ -1,4 +1,4 @@
-﻿namespace CMUFramework_Embark.Observer
+﻿namespace CMUFramework_Embark.DesignPattern.Observer
 {
     /// <summary>
     /// 观察者模式

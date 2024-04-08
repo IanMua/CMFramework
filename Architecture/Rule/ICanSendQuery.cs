@@ -1,4 +1,4 @@
-﻿using CMUFramework_Embark.Query;
+﻿using CMUFramework_Embark.Architecture.Query;
 
 namespace CMUFramework_Embark.Architecture.Rule
 {

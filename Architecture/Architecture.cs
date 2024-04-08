@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using CMUFramework_Embark.Command;
+using CMUFramework_Embark.Architecture.Command;
+using CMUFramework_Embark.Architecture.Query;
 using CMUFramework_Embark.Event;
 using CMUFramework_Embark.IOC;
-using CMUFramework_Embark.Query;
 
 namespace CMUFramework_Embark.Architecture
 {
