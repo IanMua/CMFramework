@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using CMUFramework_Embark.Command;
 using CMUFramework_Embark.Event;
 using CMUFramework_Embark.IOC;
+using CMUFramework_Embark.Query;
 
 namespace CMUFramework_Embark.Architecture
 {
@@ -40,6 +41,14 @@ namespace CMUFramework_Embark.Architecture
         /// <param name="command">实例对象</param>
         /// <typeparam name="T">Type</typeparam>
         void SendCommand<T>(T command) where T : ICommand;
+
+        /// <summary>
+        /// 发送查询
+        /// </summary>
+        /// <param name="query">实例对象</param>
+        /// <typeparam name="TResult">查询返回类型</typeparam>
+        /// <returns></returns>
+        TResult SendQuery<TResult>(IQuery<TResult> query);
 
         /// <summary>
         /// 注册 Utility
@@ -237,6 +246,12 @@ namespace CMUFramework_Embark.Architecture
         {
             command.SetArchitecture(this);
             command.Execute();
+        }
+
+        public TResult SendQuery<TResult>(IQuery<TResult> query)
+        {
+            query.SetArchitecture(this);
+            return query.Do();
         }
 
         public void RegisterUtility<TT>(TT utility) where TT : IUtility
