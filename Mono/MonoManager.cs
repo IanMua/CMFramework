@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections;
 using CMUFramework_Embark.Singleton;
-using UnityEngine;
 
 namespace CMUFramework_Embark.Mono
 {
