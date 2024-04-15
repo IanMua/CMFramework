@@ -940,9 +940,25 @@ namespace CMFramework.Core
             };
         }
 
+        public IUnregister RegisterWithInit(Action<T> onValueChanged)
+        {
+            onValueChanged(Value);
+            return Register(onValueChanged);
+        }
+
         public void Unregister(Action<T> onValueChanged)
         {
             _onValueChanged -= onValueChanged;
+        }
+
+        public static implicit operator T(BindableProperty<T> property)
+        {
+            return property.Value;
+        }
+
+        public override string ToString()
+        {
+            return Value.ToString();
         }
     }
 
