@@ -1,6 +1,5 @@
 ﻿using System;
 using CMFramework.Core;
-using CMFramework.Extensions.DesignPattern;
 
 namespace CMFramework.Extensions.Utility
 {

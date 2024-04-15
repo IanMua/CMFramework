@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using CMFramework.Extensions.DesignPattern;
 using UnityEngine;
 
-namespace CMFramework.Extensions.Pool
+namespace CMFramework
 {
     public class SubCachePool
     {
