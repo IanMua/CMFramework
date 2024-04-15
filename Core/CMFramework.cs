@@ -309,27 +309,23 @@ namespace CMFramework.Core
     }
 
     #endregion
+    
+    #region Query
 
-    #region Controller
-
-    public interface IController : ICanSendCommand, ICanGetSystem, ICanGetModel,
-        ICanRegisterEvent, ICanSendQuery
+    public interface IQuery<TResult> : ICanSetArchitecture, ICanGetModel, ICanGetSystem,
+        ICanSendQuery
     {
+        TResult Do();
     }
 
-    #endregion
-
-    #region System
-
-    public interface ISystem : ICanSetArchitecture, ICanGetUtility, ICanGetModel, ICanSendEvent,
-        ICanRegisterEvent
-    {
-        void Init();
-    }
-
-    public abstract class AbstractSystem : ISystem
+    public abstract class AbstractQuery<T> : IQuery<T>
     {
         private IArchitecture _architecture;
+
+        T IQuery<T>.Do()
+        {
+            return OnDo();
+        }
 
         IArchitecture IBelongToArchitecture.GetArchitecture()
         {
@@ -341,58 +337,11 @@ namespace CMFramework.Core
             _architecture = architecture;
         }
 
-        void ISystem.Init()
-        {
-            OnInit();
-        }
-
-        /// <summary>
-        /// 执行初始化
-        /// </summary>
-        protected abstract void OnInit();
+        protected abstract T OnDo();
     }
 
     #endregion
-
-    #region Model
-
-    public interface IModel : ICanSetArchitecture, ICanGetUtility, ICanSendEvent
-    {
-        void Init();
-    }
-
-    public abstract class AbstractModel : IModel
-    {
-        private IArchitecture _architecture;
-
-        IArchitecture IBelongToArchitecture.GetArchitecture()
-        {
-            return _architecture;
-        }
-
-        void ICanSetArchitecture.SetArchitecture(IArchitecture architecture)
-        {
-            _architecture = architecture;
-        }
-
-        void IModel.Init()
-        {
-            OnInit();
-        }
-
-        protected abstract void OnInit();
-    }
-
-    #endregion
-
-    #region Utility
-
-    public interface IUtility
-    {
-    }
-
-    #endregion
-
+    
     #region Command
 
     public interface ICommand : ICanSetArchitecture, ICanGetModel, ICanGetUtility, ICanGetSystem,
@@ -433,22 +382,25 @@ namespace CMFramework.Core
 
     #endregion
 
-    #region Query
+    #region Controller
 
-    public interface IQuery<TResult> : ICanSetArchitecture, ICanGetModel, ICanGetSystem,
-        ICanSendQuery
+    public interface IController : ICanSendCommand, ICanGetSystem, ICanGetModel,
+        ICanRegisterEvent, ICanSendQuery
     {
-        TResult Do();
     }
 
-    public abstract class AbstractQuery<T> : IQuery<T>
+    #endregion
+
+    #region Model
+
+    public interface IModel : ICanSetArchitecture, ICanGetUtility, ICanSendEvent
+    {
+        void Init();
+    }
+
+    public abstract class AbstractModel : IModel
     {
         private IArchitecture _architecture;
-
-        T IQuery<T>.Do()
-        {
-            return OnDo();
-        }
 
         IArchitecture IBelongToArchitecture.GetArchitecture()
         {
@@ -460,7 +412,55 @@ namespace CMFramework.Core
             _architecture = architecture;
         }
 
-        protected abstract T OnDo();
+        void IModel.Init()
+        {
+            OnInit();
+        }
+
+        protected abstract void OnInit();
+    }
+
+    #endregion
+    
+    #region System
+
+    public interface ISystem : ICanSetArchitecture, ICanGetUtility, ICanGetModel, ICanSendEvent,
+        ICanRegisterEvent
+    {
+        void Init();
+    }
+
+    public abstract class AbstractSystem : ISystem
+    {
+        private IArchitecture _architecture;
+
+        IArchitecture IBelongToArchitecture.GetArchitecture()
+        {
+            return _architecture;
+        }
+
+        void ICanSetArchitecture.SetArchitecture(IArchitecture architecture)
+        {
+            _architecture = architecture;
+        }
+
+        void ISystem.Init()
+        {
+            OnInit();
+        }
+
+        /// <summary>
+        /// 执行初始化
+        /// </summary>
+        protected abstract void OnInit();
+    }
+
+    #endregion
+
+    #region Utility
+
+    public interface IUtility
+    {
     }
 
     #endregion
@@ -776,8 +776,10 @@ namespace CMFramework.Core
         }
     }
 
-
-    public class TypeEventSystem : ITypeEventSystem
+    /// <summary>
+    /// 类型事件系统
+    /// </summary>
+    public class TypeEventSystem : Singleton<TypeEventSystem>, ITypeEventSystem
     {
         /// <summary>
         /// 多次注册
@@ -853,9 +855,65 @@ namespace CMFramework.Core
         }
     }
 
+    /// <summary>
+    /// 事件接口
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public interface IOnEvent<T>
+    {
+        /// <summary>
+        /// 被处理的事件
+        /// </summary>
+        /// <param name="e"></param>
+        void OnEvent(T e);
+    }
+
+    /// <summary>
+    /// 全局事件拓展
+    /// </summary>
+    public static class OnGlobalEventExtension
+    {
+        /// <summary>
+        /// 注册事件
+        /// </summary>
+        /// <param name="self"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static IUnregister RegisterEvent<T>(this IOnEvent<T> self) where T : struct
+        {
+            return TypeEventSystem.Instance.Register<T>(self.OnEvent);
+        }
+
+        /// <summary>
+        /// 取消事件注册
+        /// </summary>
+        /// <param name="seft"></param>
+        /// <typeparam name="T"></typeparam>
+        public static void UnregisterEvent<T>(this IOnEvent<T> seft) where T : struct
+        {
+            TypeEventSystem.Instance.Unregister<T>(seft.OnEvent);
+        }
+
+        /// <summary>
+        /// 注册事件并在GameObject销毁时取消事件注册
+        /// </summary>
+        /// <param name="self"></param>
+        /// <param name="gameObject"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static IUnregister RegisterAndUnregisterWhenDestroyed<T>(this IOnEvent<T> self,
+            GameObject gameObject)
+            where T : struct
+        {
+            IUnregister unregister = TypeEventSystem.Instance.Register<T>(self.OnEvent);
+            unregister.UnregisterWhenGameObjectDestroyed(gameObject);
+            return unregister;
+        }
+    }
+
     #endregion
 
-    #region IOC
+    #region `
 
     /// <summary>
     /// ICO容器
