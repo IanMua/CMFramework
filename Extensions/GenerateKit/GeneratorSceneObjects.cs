@@ -30,10 +30,22 @@ namespace CMFramework
         }
     }
 
+    public class GeneratorCount
+    {
+        public List<int> used;
+        public int maxIndex;
+
+        public GeneratorCount(List<int> used, int maxIndex)
+        {
+            this.used = used;
+            this.maxIndex = maxIndex;
+        }
+    }
+
     public class GeneratorSceneObjects
     {
         private StreamWriter _writer;
-        private readonly Dictionary<string, int> _namedCount = new Dictionary<string, int>();
+        private readonly Dictionary<string, GeneratorCount> _namedCount = new Dictionary<string, GeneratorCount>();
 
         public void GenerateScript(UnityEngine.SceneManagement.Scene scene)
         {
@@ -153,24 +165,95 @@ namespace CMFramework
             // 不符合规则的要替换成
             string replacement = "";
 
-            return Regex.Replace(input, pattern, replacement);
+            input = Regex.Replace(input, pattern, replacement);
+
+            // 如果第一位不符合C#命名规则，就在前面加上Filter
+            if (!Regex.IsMatch(input[0].ToString(), @"[a-zA-Z_@]"))
+            {
+                return "Filter" + input;
+            }
+
+            return input;
         }
 
         private string GetName(string input)
         {
             string filter = Filter(input);
 
-            Debug.Log($"namedCount: {_namedCount}");
-            Debug.Log($"filter: {filter}");
-
-            if (_namedCount.ContainsKey(filter))
+            string pattern = @"\d+$";
+            // 先获取到结尾的连续数字
+            int num = 0;
+            Match match = Regex.Match(input, pattern);
+            // 判断结尾是否有数字
+            if (match.Success)
             {
-                return $"{filter}{++_namedCount[filter]}";
+                // 如果有数字，执行有数字的逻辑
+
+                // 把字符串转换成数字
+                num = int.Parse(match.Value);
+
+                // 判断是否在字典中，判断没有结尾连续数字后的是否在字典中
+                string tempFilter = filter.Replace(num.ToString(), "");
+                if (_namedCount.ContainsKey(tempFilter))
+                {
+                    GeneratorCount count = _namedCount[tempFilter];
+
+                    // 如果在字典中，判断数字是否超过最大值
+                    bool numFlag = num > count.maxIndex;
+                    if (numFlag)
+                    {
+                        // 把最大值设置为当前数字
+                        count.maxIndex = num;
+                        // 把数字添加到记录中
+                        count.used.Add(num);
+                        return $"{filter}";
+                    }
+                    else
+                    {
+                        // 如果没有超过最大值，查找记录中是否存在
+                        for (int i = 0; i < count.used.Count; i++)
+                        {
+                            // 如果记录中存在相同的值，就设置为最大值+1
+                            if (count.used[i] == num)
+                            {
+                                // 把最大值+1，放到使用记录中
+                                count.maxIndex += 1;
+                                count.used.Add(count.maxIndex);
+                                return $"{tempFilter}{count.maxIndex}";
+                            }
+                        }
+
+                        // 如果记录中不存在，就把值添加到记录中
+                        count.used.Add(num);
+                        return $"{filter}";
+                    }
+                }
+                // 不在字典中
+                else
+                {
+                    _namedCount.Add(tempFilter, new GeneratorCount(new List<int>(), num));
+                    // 添加使用记录
+                    _namedCount[tempFilter].used.Add(num);
+                    return filter;
+                }
             }
+            // 如果没有数字
             else
             {
-                _namedCount.Add(filter, 0);
-                return filter;
+                // 如果字典中存在
+                if (_namedCount.ContainsKey(filter))
+                {
+                    // 最大值+1，存入使用记录
+                    _namedCount[filter].maxIndex += 1;
+                    _namedCount[filter].used.Add(_namedCount[filter].maxIndex);
+                    return $"{filter}{_namedCount[filter].maxIndex}";
+                }
+                // 字典中不存在
+                else
+                {
+                    _namedCount.Add(filter, new GeneratorCount(new List<int>(), 0));
+                    return filter;
+                }
             }
         }
 
