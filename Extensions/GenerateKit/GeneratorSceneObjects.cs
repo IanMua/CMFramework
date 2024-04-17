@@ -152,8 +152,6 @@ namespace CMFramework
                 _writer.WriteLine("    }");
                 _writer.WriteLine();
 
-                selfParentPath.Add(child);
-
                 CheckForChildren(selfParentPath);
             }
         }
