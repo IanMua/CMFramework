@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace CMFramework.Extensions.Attributes
+namespace CMFramework
 {
     [AttributeUsage(AttributeTargets.Field)]
     public class EnumData : System.Attribute
