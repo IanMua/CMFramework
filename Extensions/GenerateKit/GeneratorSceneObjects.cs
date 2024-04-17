@@ -35,7 +35,7 @@ namespace CMFramework
         private StreamWriter _writer;
         private readonly Dictionary<string, int> _namedCount = new Dictionary<string, int>();
 
-        public void GenerateScript(Scene scene)
+        public void GenerateScript(UnityEngine.SceneManagement.Scene scene)
         {
             string folderPath = Path.Combine(Application.dataPath, "Scripts/SceneObjects");
             string scriptPath = $"{folderPath}/{scene.name}SceneObjects.cs";
