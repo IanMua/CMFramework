@@ -15,7 +15,7 @@ namespace CMFramework.Extensions.Attributes
         }
     }
 
-    public static class EnumDataAttributeExtensions
+    public static class EnumDataExtensions
     {
         /// <summary>
         /// 获取枚举EnumData注解中的值

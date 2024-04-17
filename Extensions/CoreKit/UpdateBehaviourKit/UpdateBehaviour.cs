@@ -1,7 +1,6 @@
 ﻿using System;
-using CMFramework.Core;
 
-namespace CMFramework.Extensions.Utility
+namespace CMFramework
 {
     /// <summary>
     /// Mono管理类
