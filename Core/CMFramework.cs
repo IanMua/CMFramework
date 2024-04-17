@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CMFramework.Core
+namespace CMFramework
 {
     #region Architecture
 
@@ -913,7 +913,7 @@ namespace CMFramework.Core
 
     #endregion
 
-    #region `
+    #region IOC
 
     /// <summary>
     /// ICO容器
