@@ -8,6 +8,61 @@ namespace CMFramework
 
     public interface IArchitecture
     {
+        #region 注册
+
+        /// <summary>
+        /// 注册 Utility
+        /// </summary>
+        /// <param name="utility"></param>
+        /// <typeparam name="T"></typeparam>
+        void RegisterUtility<T>(T utility) where T : IUtility;
+
+        /// <summary>
+        /// 注册 System
+        /// </summary>
+        void RegisterSystem<T>(T instance) where T : ISystem;
+
+        /// <summary>
+        /// 注册 Model
+        /// </summary>
+        /// <param name="model"></param>
+        /// <typeparam name="T"></typeparam>
+        void RegisterModel<T>(T model) where T : IModel;
+
+        #endregion
+
+        #region 获取
+
+        /// <summary>
+        /// 获取 Utility
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        T GetUtility<T>() where T : class, IUtility;
+
+        /// <summary>
+        /// 获取 System
+        /// </summary>
+        /// <typeparam name="T">Type</typeparam>
+        /// <returns></returns>
+        T GetSystem<T>() where T : class, ISystem;
+
+        /// <summary>
+        /// 获取 Model
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        T GetModel<T>() where T : class, IModel;
+
+        #endregion
+
+        #region 通信
+
+        /// <summary>
+        /// 注册事件
+        /// </summary>
+        IUnregister RegisterEvent<T>(Action<T> onEvent);
+
         /// <summary>
         /// 发送事件
         /// </summary>
@@ -17,11 +72,6 @@ namespace CMFramework
         /// 发送事件
         /// </summary>
         void SendEvent<T>(T e);
-
-        /// <summary>
-        /// 注册事件
-        /// </summary>
-        IUnregister RegisterEvent<T>(Action<T> onEvent);
 
         /// <summary>
         /// 注销事件
@@ -49,45 +99,7 @@ namespace CMFramework
         /// <returns></returns>
         TResult SendQuery<TResult>(IQuery<TResult> query);
 
-        /// <summary>
-        /// 注册 Utility
-        /// </summary>
-        /// <param name="utility"></param>
-        /// <typeparam name="T"></typeparam>
-        void RegisterUtility<T>(T utility) where T : IUtility;
-
-        /// <summary>
-        /// 获取 Utility
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        T GetUtility<T>() where T : class, IUtility;
-
-        /// <summary>
-        /// 注册 System
-        /// </summary>
-        void RegisterSystem<T>(T instance) where T : ISystem;
-
-        /// <summary>
-        /// 获取 System
-        /// </summary>
-        /// <typeparam name="T">Type</typeparam>
-        /// <returns></returns>
-        T GetSystem<T>() where T : class, ISystem;
-
-        /// <summary>
-        /// 注册 Model
-        /// </summary>
-        /// <param name="model"></param>
-        /// <typeparam name="T"></typeparam>
-        void RegisterModel<T>(T model) where T : IModel;
-
-        /// <summary>
-        /// 获取 Model
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        T GetModel<T>() where T : class, IModel;
+        #endregion
     }
 
     /// <summary>
@@ -309,7 +321,7 @@ namespace CMFramework
     }
 
     #endregion
-    
+
     #region Query
 
     public interface IQuery<TResult> : ICanSetArchitecture, ICanGetModel, ICanGetSystem,
@@ -341,13 +353,21 @@ namespace CMFramework
     }
 
     #endregion
-    
+
     #region Command
 
     public interface ICommand : ICanSetArchitecture, ICanGetModel, ICanGetUtility, ICanGetSystem,
         ICanSendCommand, ICanSendEvent, ICanSendQuery
     {
         void Execute();
+
+        void Undo();
+    }
+
+    public interface ICommand<T> : ICanSetArchitecture, ICanGetModel, ICanGetUtility, ICanGetSystem,
+        ICanSendCommand, ICanSendEvent, ICanSendQuery
+    {
+        T Execute();
 
         void Undo();
     }
@@ -377,6 +397,39 @@ namespace CMFramework
         }
 
         protected abstract void OnExecute();
+        protected abstract void OnUndo();
+    }
+
+    public abstract class AbstractCommand<T> : ICommand<T>
+    {
+        private IArchitecture _architecture;
+
+        public IArchitecture GetArchitecture()
+        {
+            return _architecture;
+        }
+
+        public void SetArchitecture(IArchitecture architecture)
+        {
+            _architecture = architecture;
+        }
+
+        T ICommand<T>.Execute()
+        {
+            return OnExecute();
+        }
+
+        void ICommand<T>.Undo()
+        {
+            OnUndo();
+        }
+
+        public void Undo()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected abstract T OnExecute();
         protected abstract void OnUndo();
     }
 
@@ -421,7 +474,7 @@ namespace CMFramework
     }
 
     #endregion
-    
+
     #region System
 
     public interface ISystem : ICanSetArchitecture, ICanGetUtility, ICanGetModel, ICanSendEvent,
