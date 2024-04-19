@@ -7,7 +7,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace CMFramework
+namespace CMFramework.Editor
 {
     public class GeneratorSceneObjectsMenu : EditorWindow
     {
@@ -159,7 +159,7 @@ namespace CMFramework
         private string Filter(string input)
         {
             // 匹配规则 只保留大小写英文字母和数字，并且不保留(数字)
-            string pattern = @"\(\d+\)|[^a-zA-Z0-9]";
+            string pattern = @"[^a-zA-Z0-9]";
             // 不符合规则的要替换成
             string replacement = "";
 
@@ -181,7 +181,7 @@ namespace CMFramework
             string pattern = @"\d+$";
             // 先获取到结尾的连续数字
             int num = 0;
-            Match match = Regex.Match(input, pattern);
+            Match match = Regex.Match(filter, pattern);
             // 判断结尾是否有数字
             if (match.Success)
             {

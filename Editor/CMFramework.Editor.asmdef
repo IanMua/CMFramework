@@ -1,0 +1,10 @@
+{
+    "name": "CMFramework.Editor",
+    "references": [
+        "CMFramework.Runtime"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": []
+}
