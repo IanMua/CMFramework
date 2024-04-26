@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if UNITY
+using System;
 using UnityEngine;
 
 namespace CMFramework
@@ -235,3 +236,4 @@ namespace CMFramework
         }
     }
 }
+#endif

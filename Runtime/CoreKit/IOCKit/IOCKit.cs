@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+#if UNITY
 using UnityEngine;
+#endif
 using Object = System.Object;
 
 namespace CMFramework
@@ -494,7 +496,9 @@ namespace CMFramework
             if (obj == null) return false;
 
             Tuple<T1, T2> p = obj as Tuple<T1, T2>;
+#if UNITY
             Debug.LogWarning($"{typeof(Tuple)} 的转换异常");
+#endif
             if (p == null) return false;
 
             if (Item1 == null)

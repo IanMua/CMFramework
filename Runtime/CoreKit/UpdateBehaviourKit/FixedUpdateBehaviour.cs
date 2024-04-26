@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if UNITY
+using System;
 
 namespace CMFramework
 {
@@ -61,3 +62,4 @@ namespace CMFramework
         }
     }
 }
+#endif

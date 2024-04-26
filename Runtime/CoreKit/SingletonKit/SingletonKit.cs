@@ -1,5 +1,7 @@
 using System;
+#if UNITY
 using UnityEngine;
+#endif
 
 namespace CMFramework
 {
@@ -65,6 +67,7 @@ namespace CMFramework
         }
     }
 
+#if UNITY
     public abstract class MonoSingleton<T> : MonoBehaviour, ISingletonTemplate where T : MonoSingleton<T>
     {
         private static Lazy<T> _instance;
@@ -122,4 +125,5 @@ namespace CMFramework
             _instance = null;
         }
     }
+#endif
 }

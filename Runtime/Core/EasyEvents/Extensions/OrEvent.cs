@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if UNITY
+using System;
 using System.Collections.Generic;
 
 namespace CMFramework
@@ -35,3 +36,4 @@ namespace CMFramework
         public static OrEvent Or(this IEasyEvent self, IEasyEvent e) => new OrEvent().Or(self).Or(e);
     }
 }
+#endif

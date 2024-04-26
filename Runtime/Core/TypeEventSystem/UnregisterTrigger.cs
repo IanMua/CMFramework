@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿#if UNITY
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace CMFramework
@@ -115,3 +116,4 @@ namespace CMFramework
         }
     }
 }
+#endif
